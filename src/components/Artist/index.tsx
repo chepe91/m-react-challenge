@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import type { IArtist } from "./types";
-import { FavoriteContext } from "../../context/FavoriteContext";
-import { useContext } from "react";
 import { getPrimaryGenre } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import { AddFavoriteButton, RemoveFavoriteButton } from "../Buttons";
+import useFavorites from "../../hooks/useFavorites";
 
 const ArtistStyle = styled.div`
   display: flex;
@@ -41,10 +40,8 @@ export interface ArtistProps {
 }
 
 const Artist = ({ artist }: ArtistProps) => {
-  const { addFavorite, removeFavorite, isArtistFavorite } =
-    useContext(FavoriteContext);
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const navigate = useNavigate();
-  const isFavorite = isArtistFavorite(artist.id);
   const primaryGenre = getPrimaryGenre(artist.genres);
 
   const goToArtistDetail = (id: number) => {
@@ -64,7 +61,7 @@ const Artist = ({ artist }: ArtistProps) => {
         </ArtistName>
         <ArtistGenre>{primaryGenre.name}</ArtistGenre>
       </ArtistInfo>
-      {isFavorite ? (
+      {isFavorite(artist.id) ? (
         <RemoveFavoriteButton
           onClick={() => {
             removeFavorite(artist.id);
