@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import styled from "styled-components";
 import useQueryArtist from "../../hooks/useQueryArtist";
 import { getPrimaryGenre } from "../../utils";
 import { AddFavoriteButton, RemoveFavoriteButton } from "../Buttons";
-import { FavoriteContext } from "../../context/FavoriteContext";
+import useFavorites from "../../hooks/useFavorites";
 
 const StyleArtistDetailCard = styled.div`
   display: flex;
@@ -52,8 +51,7 @@ interface ArtistDetailCardProps {
 
 const ArtistDetailCard = ({ id }: ArtistDetailCardProps) => {
   const { data, isLoading, isError } = useQueryArtist(id);
-  const { isArtistFavorite, removeFavorite, addFavorite } =
-    useContext(FavoriteContext);
+  const { isFavorite, removeFavorite, addFavorite } = useFavorites();
   if (isLoading) {
     return <>Loading data...</>;
   }
@@ -63,7 +61,6 @@ const ArtistDetailCard = ({ id }: ArtistDetailCardProps) => {
   }
 
   const artist = data.data[0];
-  const isFavorite = isArtistFavorite(artist.id);
   const primaryGenre = getPrimaryGenre(artist.genres);
   const additionalGenres = artist.genres
     .filter((genre) => {
@@ -90,7 +87,7 @@ const ArtistDetailCard = ({ id }: ArtistDetailCardProps) => {
           </ArtistDetailAdditionalGenre>
         )}
         <ArtistDetailFooter>
-          {isFavorite ? (
+          {isFavorite(artist.id) ? (
             <RemoveFavoriteButton
               onClick={() => {
                 removeFavorite(artist.id);

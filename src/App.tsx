@@ -1,6 +1,5 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { FavoriteContextProvider } from "./context/FavoriteContext";
 import ArtistDetailPage from "./components/ArtistDetailPage";
 import FavoritePage from "./components/FavoritePage";
 import SearchPage from "./components/SearchPage";
@@ -27,9 +26,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <FavoriteContextProvider>
-          <RouterProvider router={router} />
-        </FavoriteContextProvider>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </>
   );

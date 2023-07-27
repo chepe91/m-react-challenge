@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export function useLocalStorage<T>(
   key: string,
@@ -6,18 +6,19 @@ export function useLocalStorage<T>(
 ): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState(initialValue);
 
-  const initialize = () => {
+  const initialize = useCallback(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      return item ? (JSON.parse(item) as T) : initialValue;
     } catch (error) {
       console.error(error);
       return initialValue;
     }
-  };
+  }, [initialValue, key]);
 
   useEffect(() => {
     setStoredValue(initialize());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setValue = (value: T) => {

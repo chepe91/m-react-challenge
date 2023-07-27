@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Backbutton } from "../Buttons";
 import styled from "styled-components";
-import { FavoriteContext } from "../../context/FavoriteContext";
 import FavoriteArtist from "../FavoriteArtist";
+import useFavorites from "../../hooks/useFavorites";
 
 const StyleFavoritePage = styled.div`
   display: flex;
@@ -20,7 +19,7 @@ const FavoritePageNoData = styled.h3`
 
 const FavoritePage = () => {
   const navigate = useNavigate();
-  const { favorites } = useContext(FavoriteContext);
+  const { favorites } = useFavorites();
 
   const goBack = () => {
     navigate("/");
